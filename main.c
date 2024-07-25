@@ -240,7 +240,7 @@ value *parse_hash_literal() {
     throw("parse error: unexpected token %c", *input);
   }
 }
-value *parse_list();
+value *parse_list(void);
 value *parse_value() {
 #ifdef DEBUG
   printf("parse_value: %s\n", input);
