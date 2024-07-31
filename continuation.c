@@ -1,6 +1,12 @@
 #include "main.h"
 #include "continuation.h"
 
+#define MEMMOVE(dst, src, n) do { \
+        uint8_t *d = dst, *s = src; \
+        for (unsigned long i = n; i > 0; i--) \
+            *d++ = *s++; \
+    } while (0)
+
 value *mk_continuation_value(continuation *cont) {
   value *e = xmalloc(sizeof(value));
   TYPEOF(e) = CONTINUATION;
@@ -14,7 +20,7 @@ void *get_continuation(continuation *c) {
   c->rsp = rsp;
   c->stacklen = main_rbp - rsp + 1;
   c->stack = malloc(sizeof(char) * c->stacklen);
-  memmove(c->stack, c->rsp, c->stacklen);
+  MEMMOVE(c->stack, c->rsp, c->stacklen);
   if (setjmp(c->cont_reg) == 0)
     return NULL;
   else
